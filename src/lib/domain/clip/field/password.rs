@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq, PartialOrd,Eq,Default)]
 pub struct Password(Option<String>);
 
 impl Password {
@@ -32,11 +32,11 @@ impl Password {
     }
 }
 
-impl Default for Password {
-    fn default() -> Self {
-        Self(None)
-    }
-}
+// impl Default for Password {
+//     fn default() -> Self {
+//         Self(None)
+//     }
+// }
 
 impl FromStr for Password {
     type Err = ClipError;

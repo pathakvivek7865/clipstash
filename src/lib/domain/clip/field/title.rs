@@ -3,7 +3,7 @@ use crate::domain::clip::ClipError;
 use serde::{Deserialize, Serialize};
 use std::str::FromStr;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize,Default)]
 pub struct Title(Option<String>);
 
 impl Title {
@@ -27,11 +27,11 @@ impl Title {
     }
 }
 
-impl Default for Title {
-    fn default() -> Self {
-        Self(None)
-    }
-}
+// impl Default for Title {
+//     fn default() -> Self {
+//         Self(None)
+//     }
+// }
 
 impl FromStr for Title {
     type Err = ClipError;
