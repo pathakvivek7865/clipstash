@@ -1,0 +1,5 @@
+/target
+*.db*
+Cargo.lock
+data.db-shm
+data.db-wal
