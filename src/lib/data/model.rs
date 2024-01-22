@@ -25,7 +25,7 @@ impl TryFrom<Clip> for crate::domain::Clip {
         Ok(Self {
             clip_id: field::ClipId::new(DbId::from_str(value.clip_id.as_str())?),
             shortcode: field::Shortcode::from(value.shortcode),
-            content: field::Content::new(&value.content.as_str())?,
+            content: field::Content::new(value.content.as_str())?,
             title: field::Title::new(value.title),
             posted: field::Posted::new(Time::from_naive_utc(value.posted)),
             expires: field::Expires::new(value.expires.map(Time::from_naive_utc)),

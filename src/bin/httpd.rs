@@ -1,4 +1,4 @@
-use clipstash::data::{self, AppDatabase};
+use clipstash::data::AppDatabase;
 use clipstash::web::hitcounter::HitCounter;
 use clipstash::web::renderer::Renderer;
 

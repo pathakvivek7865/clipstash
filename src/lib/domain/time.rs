@@ -20,14 +20,14 @@ impl Time {
     }
 }
 
-impl FromStr for Time{
+impl FromStr for Time {
     type Err = chrono::ParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         // 2024-01-21
-        match format!("{}T00:00:00Z",s).parse::<DateTime<Utc>>() {
+        match format!("{}T00:00:00Z", s).parse::<DateTime<Utc>>() {
             Ok(time) => Ok(time.into()),
-            Err(err) => Err(err)
+            Err(err) => Err(err),
         }
     }
 }

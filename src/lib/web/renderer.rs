@@ -30,7 +30,7 @@ impl<'a> Renderer<'a> {
     where
         S: serde::Serialize + std::fmt::Debug,
     {
-        serde_json::to_value(&serializable).expect("failed to convert structiure to value")
+        serde_json::to_value(serializable).expect("failed to convert structiure to value")
     }
 
     pub fn render<P>(&self, context: P, errors: &[&str]) -> String

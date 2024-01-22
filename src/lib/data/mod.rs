@@ -22,7 +22,7 @@ pub type AppQueryRow = sqlx::sqlite::SqliteQueryResult;
 pub struct Database<D: sqlx::Database>(sqlx::Pool<D>);
 
 impl Database<Sqlite> {
-    pub async fn new(connection_str: &str)-> Self{
+    pub async fn new(connection_str: &str) -> Self {
         let pool = sqlx::sqlite::SqlitePoolOptions::new()
             .connect(connection_str)
             .await;
@@ -30,14 +30,16 @@ impl Database<Sqlite> {
         match pool {
             Ok(pool) => Self(pool),
             Err(err) => {
-                eprintln!("{}\n",err);
-                eprintln!("If the database has not yet been created, run: \n $ sqlx database setup \n");
+                eprintln!("{}\n", err);
+                eprintln!(
+                    "If the database has not yet been created, run: \n $ sqlx database setup \n"
+                );
                 panic!("database connection error");
             }
         }
     }
 
-    pub fn get_pool(&self) -> &DatabasePool{
+    pub fn get_pool(&self) -> &DatabasePool {
         &self.0
     }
 }

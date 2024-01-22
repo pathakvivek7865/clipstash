@@ -44,7 +44,8 @@ impl<'r> FromFormField<'r> for Expires {
         if field.value.trim().is_empty() {
             Ok(Self(None))
         } else {
-            Ok(Self::from_str(field.value).map_err(|e| form::Error::validation(format!("{}", e)))?)
+            Ok(Self::from_str(field.value)
+                .map_err(|e| form::Error::validation(format!("{}", e)))?)
         }
     }
 }

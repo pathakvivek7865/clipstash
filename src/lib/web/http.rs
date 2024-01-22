@@ -1,15 +1,13 @@
 use crate::data::AppDatabase;
-use crate::domain::clip;
 use crate::service::action;
-use crate::service::{self, ask};
+use crate::service::{self};
 use crate::web::{ctx, form, renderer::Renderer, PageError};
 use crate::{ServiceError, Shortcode};
 use rocket::form::{Contextual, Form};
 use rocket::http::{Cookie, CookieJar, Status};
 use rocket::response::content::RawHtml;
 use rocket::response::{status, Redirect};
-use rocket::{data, uri, State};
-use sqlx::database;
+use rocket::{uri, State};
 
 use super::hitcounter::HitCounter;
 use super::PASSWORD_COOKIE;
@@ -171,9 +169,8 @@ pub async fn get_raw_clip(
         password: cookies
             .get(PASSWORD_COOKIE)
             .map(|cookie| cookie.value())
-            .map(|raw_password| Password::new(raw_password.to_string()).ok())
-            .flatten()
-            .unwrap_or_else(|| Password::default()),
+            .and_then(|raw_password| Password::new(raw_password.to_string()).ok())
+            .unwrap_or_default(),
     };
 
     match action::get_clip(req, database.get_pool()).await {

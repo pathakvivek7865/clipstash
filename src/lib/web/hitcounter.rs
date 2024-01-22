@@ -2,9 +2,8 @@ use crate::data::DatabasePool;
 use crate::service::{self, ServiceError};
 use crate::Shortcode;
 use crossbeam_channel::TryRecvError;
-use crossbeam_channel::{unbounded, Receiver, Sender};
+use crossbeam_channel::{unbounded, Sender};
 use parking_lot::Mutex;
-use serde_json::error;
 use std::collections::HashMap;
 use std::sync::Arc;
 use std::time::Duration;
@@ -65,7 +64,7 @@ impl HitCounter {
         Self { tx }
     }
 
-    pub fn process_msg(
+    fn process_msg(
         msg: HitCounterMsg,
         hits: HitStore,
         handle: Handle,
@@ -75,7 +74,7 @@ impl HitCounter {
             HitCounterMsg::Commit => Self::commit_hits(hits.clone(), handle.clone(), pool.clone())?,
             HitCounterMsg::Hit(shortcode, count) => {
                 let mut hitcount = hits.lock();
-                let mut hitcount = hitcount.entry(shortcode).or_insert(0);
+                let hitcount = hitcount.entry(shortcode).or_insert(0);
                 *hitcount += count;
             }
         }
@@ -83,7 +82,7 @@ impl HitCounter {
         Ok(())
     }
 
-    pub fn commit_hits(
+    fn commit_hits(
         hits: HitStore,
         handle: Handle,
         pool: DatabasePool,

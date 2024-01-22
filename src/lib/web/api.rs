@@ -3,13 +3,13 @@ use crate::service;
 use crate::service::action;
 use crate::web::{hitcounter::HitCounter, PASSWORD_COOKIE};
 use crate::ServiceError;
+use base64::{engine::general_purpose::STANDARD_NO_PAD, Engine as _};
 use rocket::http::{CookieJar, Status};
 use rocket::request::{FromRequest, Outcome, Request};
 use rocket::serde::json::Json;
+use rocket::Responder;
 use rocket::State;
-use rocket::{response, Responder};
 use serde::Serialize;
-use serde_json::error;
 use std::str::FromStr;
 
 pub const API_KEY_HEADER: &str = "x-api-key";
@@ -30,7 +30,7 @@ pub struct ApiKey(Vec<u8>);
 
 impl ApiKey {
     pub fn to_base64(&self) -> String {
-        base64::encode(self.0.as_slice())
+        STANDARD_NO_PAD.encode(self.0.as_slice())
     }
 
     pub fn into_inner(self) -> Vec<u8> {
@@ -49,7 +49,8 @@ impl FromStr for ApiKey {
     type Err = ApiKeyError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        base64::decode(s)
+        STANDARD_NO_PAD
+            .decode(s)
             .map(ApiKey)
             .map_err(|e| ApiKeyError::DecodeError(e.to_string()))
     }
@@ -151,9 +152,8 @@ pub async fn get_clip(
         password: cookies
             .get(PASSWORD_COOKIE)
             .map(|cookie| cookie.value())
-            .map(|raw_password| Password::new(raw_password.to_string()).ok())
-            .flatten()
-            .unwrap_or_else(Password::default),
+            .and_then(|raw_password| Password::new(raw_password.to_string()).ok())
+            .unwrap_or_default(),
     };
 
     let clip = action::get_clip(req, database.get_pool()).await?;

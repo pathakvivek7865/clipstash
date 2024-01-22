@@ -6,7 +6,6 @@ use clipstash::{
 };
 use std::error::Error;
 use structopt::StructOpt;
-use strum::EnumString;
 
 #[derive(Debug, StructOpt)]
 enum Command {
@@ -89,7 +88,7 @@ fn run(opt: Opt) -> Result<(), Box<dyn Error>> {
             password,
         } => {
             let req = GetClip {
-                shortcode: shortcode.into(),
+                shortcode,
                 password: Password::new(password.unwrap_or_default())?,
             };
 

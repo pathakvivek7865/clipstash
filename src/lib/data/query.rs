@@ -2,7 +2,6 @@ use super::model;
 use crate::data::{DataError, DatabasePool};
 use crate::web::api::ApiKey;
 use crate::Shortcode;
-use rocket::futures::future::ok;
 use sqlx::Row;
 
 type Result<T> = std::result::Result<T, DataError>;
@@ -103,7 +102,7 @@ pub async fn update_clip<M: Into<model::UpdateClip>>(
 pub async fn save_api_key(api_key: ApiKey, pool: &DatabasePool) -> Result<ApiKey> {
     let bytes = api_key.clone().into_inner();
 
-    let _ = sqlx::query!("INSERT INTO api_keys (api_key) VALUES (?)", bytes)
+    sqlx::query!("INSERT INTO api_keys (api_key) VALUES (?)", bytes)
         .execute(pool)
         .await
         .map(|_| ())?;

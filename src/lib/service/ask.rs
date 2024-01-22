@@ -1,7 +1,6 @@
 use crate::domain::clip::field::{self, Password};
 use crate::Shortcode;
 
-use derive_more::Constructor;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -35,7 +34,6 @@ pub struct NewClip {
     pub expires: field::Expires,
     pub password: field::Password,
 }
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UpdateClip {

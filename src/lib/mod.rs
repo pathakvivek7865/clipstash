@@ -32,5 +32,5 @@ pub fn rocket(config: RocketConfig) -> Rocket<Build> {
 pub struct RocketConfig {
     pub renderer: Renderer<'static>,
     pub database: AppDatabase,
-    pub hit_counter : HitCounter,
+    pub hit_counter: HitCounter,
 }
